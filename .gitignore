@@ -1,5 +1,5 @@
 .gradle
-db.properties
+src/main/resources/application.properties
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
