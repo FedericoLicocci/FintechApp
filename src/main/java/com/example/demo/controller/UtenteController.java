@@ -23,23 +23,23 @@ public class UtenteController {
         return "login"; // login.html nella cartella templates o static
     }
 
-    // Gestisce la form di login
-    @PostMapping("/login")
-    public String doLogin(@RequestParam String nome,
-                          @RequestParam String password,
-                          HttpSession session) {
-
-        Utente user = utenteRepository.findByNome(nome).orElse(null);
-
-        if (user != null && user.getPassword().equals(password)) {
-            // Login corretto, salvo username in sessione
-            session.setAttribute("username", user.getNome());
-            return "redirect:/payment"; // pagina di pagamento
-        } else {
-            // Login fallito, ritorna a login con errore (puoi gestirlo meglio)
-            return "redirect:/login?error=true";
-        }
-    }
+//    // Gestisce la form di login
+//    @PostMapping("/login")
+//    public String doLogin(@RequestParam String nome,
+//                          @RequestParam String password,
+//                          HttpSession session) {
+//
+//        Utente user = utenteRepository.findByNome(nome).orElse(null);
+//
+//        if (user != null && user.getPassword().equals(password)) {
+//            // Login corretto, salvo username in sessione
+//            session.setAttribute("username", user.getNome());
+//            return "redirect:/payment"; // pagina di pagamento
+//        } else {
+//            // Login fallito, ritorna a login con errore (puoi gestirlo meglio)
+//            return "redirect:/login?error=true";
+//        }
+//    }
 
     // Logout (cancella sessione)
     @GetMapping("/logout")
