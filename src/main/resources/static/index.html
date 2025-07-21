@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="form-container">
+        <form id="paymentForm" method="POST" action="/transfer">
+            <input type="text" name="sender" placeholder="Sender" class="form-input" required>
+            <input type="number" name="amount" placeholder="Amount" class="form-input" required>
+            <input type="text" name="receiver" placeholder="Receiver" class="form-input" required>
+            <button type="submit" class="submit-button">Send Payment</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
