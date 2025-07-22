@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ultimi Movimenti</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}" /> <!-- se hai un file CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .back-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Ultimi 5 Movimenti</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Mittente</th>
+        <th>Destinatario</th>
+        <th>Importo</th>
+        <th>Data</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="movement : ${lastPayments}">
+        <td th:text="${movement.sender}">Mario</td>
+        <td th:text="${movement.receiver}">Luigi</td>
+        <td th:text="${movement.amount} + ' €'">100 €</td>
+        <td th:text="${#temporals.format(movement.date, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="back-button">
+    <a href="/payment">← Torna indietro</a>
+</div>
+
+</body>
+</html>
