@@ -78,6 +78,7 @@ public class PaymentController {
 
     @GetMapping("/lastmovements")
     public String showLastMovements(Model model) {
+        System.out.println("Entro");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
 
@@ -87,6 +88,7 @@ public class PaymentController {
         // ✅ CHIAMATA CORRETTA usando l'istanza e non il nome della classe
         List<Movement> lastPayments = movementRepository.findTop5ByUtenteOrderByDateDesc(utente);
 
+        System.out.println("Entro2: " + lastPayments);
         model.addAttribute("lastPayments", lastPayments);
 
         System.out.println(lastPayments);
