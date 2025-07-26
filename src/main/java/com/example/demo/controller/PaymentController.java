@@ -76,7 +76,7 @@ public class PaymentController {
         return "redirect:/PaymentSucces.html";
     }
 
-    @GetMapping("/last-movements")
+    @GetMapping("/lastmovements")
     public String showLastMovements(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
@@ -88,6 +88,8 @@ public class PaymentController {
         List<Movement> lastPayments = movementRepository.findTop5ByUtenteOrderByDateDesc(utente);
 
         model.addAttribute("lastPayments", lastPayments);
-        return "last-movements";
+
+        System.out.println(lastPayments);
+        return "lastmovements.html";
     }
 }

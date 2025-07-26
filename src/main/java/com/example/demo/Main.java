@@ -35,10 +35,10 @@ public class Main {
     }
 
 
-    @GetMapping("/error")
-    public String error() {
-
-        return "Errore, impossibile caricare la pagina!";
-
-    }
+//    @GetMapping("/error")
+//    public String error() {
+//
+//        return "error";
+//
+//    }
 }
