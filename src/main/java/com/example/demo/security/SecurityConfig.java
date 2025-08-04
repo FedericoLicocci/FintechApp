@@ -38,14 +38,18 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())  // DISABILITA CSRF
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/auth", "/test", "/register", "/login").permitAll()
                         .anyRequest().authenticated() // tutte le richieste richiedono login
                 )
                 .formLogin(form -> form
-                        //.loginPage("/login") // opzionale: puoi usare la login predefinita rimuovendo questa riga
-                        .defaultSuccessUrl("/index.html", true) // 👈 redirect after login
+                        .loginPage("/auth") // opzionale: puoi usare la login predefinita rimuovendo questa riga
+                        .loginProcessingUrl("/process-login")
+                        .defaultSuccessUrl("/home", true) // 👈 redirect after login
                         .permitAll()
                 )
                 .logout(logout -> logout
+                        .logoutSuccessUrl("/auth")
                         .permitAll()
                 );
         return http.build();

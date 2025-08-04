@@ -1,0 +1,97 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    background-color: #f9f9f9;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0a2540;
+    padding: 1rem 2rem;
+    color: white;
+}
+
+.dashboard {
+    padding: 2rem;
+}
+
+.saldo {
+    background: #e3f2fd;
+    width: 25%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+}
+
+.saldo-importo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0a2540;
+}
+
+.movimenti ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    margin-top: 1rem;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #0a2540;
+    font-weight: bold;
+}
+
+.user-icon i {
+    color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+thead th {
+    background-color: #0a2540;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: left;
+}
+
+tbody tr {
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+tbody td {
+    padding: 14px 16px;
+    font-size: 15px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+.back-button {
+    margin-top: 20px;
+}

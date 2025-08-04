@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Utente;
 import com.example.demo.repository.UtenteRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -16,16 +18,28 @@ public class UtenteController {
         this.utenteRepository = utenteRepository;
     }
 
-    // Mostra la pagina di login
-    @GetMapping("/login")
-    public String showLogin() {
-        return "login"; // login.html nella cartella templates o static
+    @PostMapping("/register")
+    public String registerUser(
+            @RequestParam String nome,
+            @RequestParam String password,
+            Model model
+    ) {
+        // Controlla se esiste già un utente con lo stesso nome
+        if (utenteRepository.findByNome(nome).isPresent()) {
+            System.out.println("Sono qui");
+            model.addAttribute("error", "Nome utente già registrato");
+            return "register"; // Torna alla pagina di registrazione con errore
+        }
+
+        // Crea il nuovo utente
+        Utente nuovoUtente = new Utente();
+        nuovoUtente.setNome(nome);
+        nuovoUtente.setPassword(password); // ⚠️ Da criptare in produzione
+
+        utenteRepository.save(nuovoUtente);
+
+        return "redirect:/login?registered"; // O la pagina che preferisci
     }
 
-    // Logout (cancella sessione)
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
-    }
+
 }

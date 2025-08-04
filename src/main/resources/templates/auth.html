@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login e Registrazione</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}"> <!-- CSS esterno -->
+</head>
+<body>
+<div class="container">
+    <div class="form-container">
+        <!-- Form Registrazione -->
+        <div class="form-box">
+            <h2>Registrazione</h2>
+            <form id="register-form" action="/register" method="post">
+                <input type="text" name="nome" placeholder="Username" required>
+                <input type="email" name="email" placeholder="Email">
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Registrati</button>
+            </form>
+        </div>
+
+        <!-- Separatore verticale -->
+        <div class="divider"></div>
+
+        <!-- Form Login -->
+        <div class="form-box">
+            <h2>Login</h2>
+            <form id="login-form" action="/login" method="post">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Accedi</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--<div>-->
+<!--    <img th:src="@{/images/porsche.jpg}" alt="porsche" />-->
+<!--</div>-->
+
+<script th:src="@{/js/auth.js}"></script>
+</body>
+</html>

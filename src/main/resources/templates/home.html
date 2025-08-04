@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - FintechApp</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- 🔝 Top bar con profilo -->
+<header class="top-bar">
+    <div class="logo">FintechApp</div>
+    <div class="user-icon" onclick="toggleMenu()">
+        <i class="fa-solid fa-user-circle fa-2x"></i>
+        <div id="userDropdown" class="dropdown-menu">
+            <a th:href="@{/profilo}">Il mio profilo</a>
+            <a th:href="@{/documenti}">Documenti</a>
+            <a th:href="@{/impostazioni}">Impostazioni</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+
+</header>
+
+<!-- 🏠 Sezione contenuti principali -->
+<main class="dashboard">
+
+    <!-- 💰 Saldo disponibile -->
+    <section class="saldo">
+        <h2>Saldo disponibile</h2>
+        <p class="saldo-importo" th:text="${saldo} + ' €'">0.00 €</p>
+    </section>
+
+    <!-- 📄 Lista ultimi movimenti -->
+    <section class="movimenti">
+
+        <h2>Ultimi 5 Movimenti</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Mittente</th>
+                <th>Destinatario</th>
+                <th>Importo</th>
+                <th>Data</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="movement : ${lastPayments}">
+                <td th:text="${movement.sender}">Mario</td>
+                <td th:text="${movement.receiver}">Luigi</td>
+                <td th:text="${movement.amount} + ' €'">100 €</td>
+                <td th:text="${#temporals.format(movement.date, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 💳 Sezione pagamenti -->
+    <nav class="menu">
+        <ul>
+            <li><a th:href="@{/pagamenti}"><i class="fa-solid fa-money-bill-transfer"></i> Pagamenti</a></li>
+        </ul>
+    </nav>
+
+</main>
+
+<!--<script th:src="@{/js/home.js}"></script>-->
+
+</body>
+</html>
