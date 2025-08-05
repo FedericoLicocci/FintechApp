@@ -6,6 +6,7 @@ import com.example.demo.repository.MovementRepository;
 import com.example.demo.repository.UtenteRepository;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.MovementService;
+import com.example.demo.dto.RegisterRequest;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,9 +97,10 @@ public class PaymentController {
     }
 
     @GetMapping("/auth")
-    public String auth() {
+    public String auth(Model model) {
         System.out.println("Sono in auth...");
-        return "auth.html";
+        model.addAttribute("registerRequest", new RegisterRequest());
+        return "auth"; // <-- senza .html!
     }
 
     @PostMapping("/test")

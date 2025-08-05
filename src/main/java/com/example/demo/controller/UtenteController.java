@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.dto.RegisterRequest;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+
+
 
 @Controller
 public class UtenteController {
@@ -18,28 +23,42 @@ public class UtenteController {
         this.utenteRepository = utenteRepository;
     }
 
+
+    @GetMapping("/register")
+    public String showRegisterForm(Model model) {
+        model.addAttribute("registerRequest", new RegisterRequest());
+        return "auth"; // this is your register.html
+    }
+
+
     @PostMapping("/register")
     public String registerUser(
-            @RequestParam String nome,
-            @RequestParam String password,
+            @Valid @ModelAttribute("registerRequest") RegisterRequest request,
+            BindingResult result,
             Model model
     ) {
-        // Controlla se esiste già un utente con lo stesso nome
-        if (utenteRepository.findByNome(nome).isPresent()) {
-            System.out.println("Sono qui");
-            model.addAttribute("error", "Nome utente già registrato");
-            return "register"; // Torna alla pagina di registrazione con errore
+        // If validation fails, return to form
+        if (result.hasErrors()) {
+            System.out.println("C'è stato un errore...");
+            return "auth"; // Thymeleaf will show field errors
         }
 
-        // Crea il nuovo utente
+        // Check if username already exists
+        if (utenteRepository.findByNome(request.getNome()).isPresent()) {
+            model.addAttribute("error", "Nome utente già registrato");
+            return "auth";
+        }
+
+        // Create new user
         Utente nuovoUtente = new Utente();
-        nuovoUtente.setNome(nome);
-        nuovoUtente.setPassword(password); // ⚠️ Da criptare in produzione
+        nuovoUtente.setNome(request.getNome());
+        nuovoUtente.setPassword(request.getPassword()); // ⚠️ Encrypt in production
 
         utenteRepository.save(nuovoUtente);
 
-        return "redirect:/login?registered"; // O la pagina che preferisci
+        return "redirect:/login?registered";
     }
+
 
 
 }
