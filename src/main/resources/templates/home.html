@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <title>Home - FintechApp</title>
     <link rel="stylesheet" th:href="@{/css/home.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" th:href="@{/css/profileIcon.css}">
 </head>
 <body>
 
 <!-- 🔝 Top bar con profilo -->
 <header class="top-bar">
     <div class="logo">FintechApp</div>
-    <div class="user-icon" onclick="toggleMenu()">
-        <i class="fa-solid fa-user-circle fa-2x"></i>
+    <div class="profile-container">
+        <img th:src="@{/images/Profile.png}" id="profileIcon" class="profile-icon" alt="Profilo">
+
         <div id="userDropdown" class="dropdown-menu">
-            <a th:href="@{/profilo}">Il mio profilo</a>
-            <a th:href="@{/documenti}">Documenti</a>
-            <a th:href="@{/impostazioni}">Impostazioni</a>
-            <a th:href="@{/logout}">Logout</a>
+            <ul>
+                <li><a th:href="@{/profilo}">Il mio profilo</a></li>
+                <li><a th:href="@{/documenti}">Documenti</a></li>
+                <li><a th:href="@{/impostazioni}">Impostazioni</a></li>
+                <li><a th:href="@{/logout}">Logout</a></li>
+            </ul>
         </div>
     </div>
+
 
 </header>
 
@@ -67,6 +71,7 @@
 </main>
 
 <!--<script th:src="@{/js/home.js}"></script>-->
+<script th:src="@{/js/profileIcon.js}"></script>
 
 </body>
 </html>
