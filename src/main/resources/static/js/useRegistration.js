@@ -1,5 +1,4 @@
 document.getElementById("registrationForm").addEventListener("submit", function (e) {
-
   console.log("Sono nel JS di register form");
 
   e.preventDefault();
@@ -10,7 +9,7 @@ document.getElementById("registrationForm").addEventListener("submit", function 
   formData.append("nome", form.firstName.value);
   formData.append("cognome", form.lastName.value);
   formData.append("dataNascita", form.dob.value);
-  formData.append("codiceFiscale", form.fiscalCode.value.toUpperCase()); // Normalizzazione ok
+  formData.append("codiceFiscale", form.fiscalCode.value.toUpperCase());
   formData.append("email", form.email.value);
   formData.append("telefono", form.phone.value);
   formData.append("username", form.username.value);
@@ -24,19 +23,18 @@ document.getElementById("registrationForm").addEventListener("submit", function 
     body: formData.toString()
   })
   .then(response => {
-    if (response.redirected) {
-      // Spring potrebbe fare redirect lato server dopo la registrazione
-      window.location.href = response.url;
-    } else if (response.ok) {
-      alert("Registrazione completata!");
-    } else {
-      return response.text().then(msg => {
-        alert("Errore: " + msg);
-      });
-    }
+    return response.text().then(message => {
+      if (response.ok) {
+        alert("✅ Registrazione completata!");
+        // Se vuoi, reindirizza alla pagina di login
+        // window.location.href = "/login";
+      } else {
+        alert("❌ Errore: " + message);
+      }
+    });
   })
   .catch(error => {
-    console.error("Errore nella richiesta:", error);
-    alert("Errore di connessione.");
+    console.error("❌ Errore nella richiesta:", error);
+    alert("❌ Errore di connessione al server.");
   });
 });
