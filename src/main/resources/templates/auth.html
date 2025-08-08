@@ -11,20 +11,20 @@
         <!-- Form Registrazione -->
         <div class="form-box">
             <h2>Registrazione</h2>
-            <form th:action="@{/register}" th:object="${registerRequest}" method="post">
-                <input type="text" th:field="*{nome}" placeholder="Username" required>
-                <p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color:red"></p>
-                <!-- <input type="email" th:field="*{email}" placeholder="Email"> -->
-                <input type="password" th:field="*{password}" placeholder="Password" required>
-                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color:red"></p>
+            <form id="test-reg" th:action="@{/signup}" th:object="${registerRequest}" method="post">
+<!--                <input type="text" th:field="*{nome}" placeholder="Username" required>-->
+<!--                <p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color:red"></p>-->
+<!--                &lt;!&ndash; <input type="email" th:field="*{email}" placeholder="Email"> &ndash;&gt;-->
+<!--                <input type="password" th:field="*{password}" placeholder="Password" required>-->
+<!--                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color:red"></p>-->
 
-                <!-- Div nascosto per passare errori al JS -->
-                <div id="validationErrors"
-                     th:data-has-errors="${#fields.hasErrors()}"
-                     th:data-nome-error="${#fields.hasErrors('nome') ? #fields.errors('nome')[0] : ''}"
-                     th:data-password-error="${#fields.hasErrors('password') ? #fields.errors('password')[0] : ''}"
-                     style="display:none;">
-                </div>
+<!--                &lt;!&ndash; Div nascosto per passare errori al JS &ndash;&gt;-->
+<!--                <div id="validationErrors"-->
+<!--                     th:data-has-errors="${#fields.hasErrors()}"-->
+<!--                     th:data-nome-error="${#fields.hasErrors('nome') ? #fields.errors('nome')[0] : ''}"-->
+<!--                     th:data-password-error="${#fields.hasErrors('password') ? #fields.errors('password')[0] : ''}"-->
+<!--                     style="display:none;">-->
+<!--                </div>-->
 
                 <button type="submit">Registrati</button>
             </form>
@@ -44,10 +44,8 @@
         </div>
     </div>
 </div>
-
-
-
 <script th:src="@{/js/auth.js}"></script>
 <script th:src="@{/js/alert.js}"></script>
+<script th:src="@{/js/register.js}"></script>
 </body>
 </html>

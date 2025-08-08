@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('register-form');
-
+    const form = document.getElementById('test-reg');
+    console.log("Sono in test-reg");
     if (!form) {
         console.error("Form di login non trovato (ID 'register-form')");
         return;
@@ -9,24 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', function(event) {
         event.preventDefault(); // Impedisce l'invio standard del form
 
-        const username = form.username.value;
-        const password = form.password.value;
+        //const username = form.username.value;
+       // const password = form.password.value;
 
         // Validazione semplice (opzionale)
-        if (!username || !password) {
-            alert("Inserisci username e password.");
-            return;
-        }
+        //if (!username || !password) {
+        //    alert("Inserisci username e password.");
+        //    return;
+        //}
 
         // Invia credenziali al backend
-        fetch('/register', {
+        fetch('/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                username: username,
-                password: password
+            }
+            //body: new URLSearchParams({
+            //    username: username,
+            //    password: password
             })
         })
         .then(response => {
