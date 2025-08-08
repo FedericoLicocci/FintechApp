@@ -39,6 +39,11 @@ public class UtenteController {
         return "useRegistration";
     }
 
+    @GetMapping("/terms")
+    public String showTermsPage() {
+        return "terms";
+    }
+
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity<String> registerUser(

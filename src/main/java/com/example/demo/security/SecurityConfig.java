@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())  // DISABILITA CSRF
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/auth", "/signup", "/register", "/login", "/useRegistration").permitAll()
+                        .requestMatchers("/auth", "/signup", "/register", "/login", "/useRegistration", "/terms").permitAll()
                         .anyRequest().authenticated() // tutte le richieste richiedono login
                 )
                 .formLogin(form -> form
