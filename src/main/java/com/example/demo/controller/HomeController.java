@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 
@@ -31,8 +32,17 @@ public class HomeController {
 
         List<Movement> lastPayments = movementRepository.findTop5ByUtenteIdOrderByDateDesc(utente.getId());
 
+        // Somma movimenti con lo stesso senderId (supponiamo senderId = utente.getId())
+        BigDecimal totaleEntrate = movementRepository.sumAmountBySenderId(utente.getId());
+
+        // se non ci sono movimenti, sum può essere null
+        if (totaleEntrate == null) {
+            totaleEntrate = BigDecimal.ZERO;
+        }
+
         model.addAttribute("saldo", utente.getSaldo());
         model.addAttribute("lastPayments", lastPayments);
+        model.addAttribute("entrate", totaleEntrate);
 
         return "home";
     }
