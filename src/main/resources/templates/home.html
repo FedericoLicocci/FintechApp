@@ -79,8 +79,8 @@
                 </thead>
                 <tbody>
                     <tr th:each="movement : ${lastPayments}">
-                        <td th:text="${movement.sender}">Mario</td>
-                        <td th:text="${movement.receiver}">Luigi</td>
+                        <td th:text="${movement.sender.id}">Mario</td>
+                        <td th:text="${movement.receiver.id}">Luigi</td>
                         <td th:text="${movement.amount} + ' €'">100 €</td>
                         <td th:text="${#temporals.format(movement.date, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
                     </tr>

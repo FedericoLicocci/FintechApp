@@ -18,19 +18,31 @@ public class Movement {
     @Column(nullable = false)
     private LocalDateTime date;
 
-    @Column(nullable = false)
-    private String sender;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "senderid", nullable = false)
+    private Utente sender;
 
-    @Column(nullable = false)
-    private String receiver;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiverid", nullable = false)
+    private Utente receiver;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid", nullable = false)
     private Utente utente;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.completed;
+
+    public enum Status {
+        pending,
+        completed,
+        failed
+    }
+
     public Movement() {}
 
-    // --- Getters and Setters ---
+    // Getters and Setters
 
     public int getTransactionid() {
         return transactionid;
@@ -56,19 +68,19 @@ public class Movement {
         this.date = date;
     }
 
-    public String getSender() {
+    public Utente getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(Utente sender) {
         this.sender = sender;
     }
 
-    public String getReceiver() {
+    public Utente getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(String receiver) {
+    public void setReceiver(Utente receiver) {
         this.receiver = receiver;
     }
 
@@ -78,5 +90,13 @@ public class Movement {
 
     public void setUtente(Utente utente) {
         this.utente = utente;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

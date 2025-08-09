@@ -61,7 +61,7 @@ public class UtenteController {
                     .body(errorMessage.toString().trim());
         }
 
-        if (utenteRepository.findByNome(request.getNome()).isPresent()) {
+        if (utenteRepository.findByUsername(request.getUsername()).isPresent()) {
             System.out.println("C'è già un utente con questo nome!");
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)

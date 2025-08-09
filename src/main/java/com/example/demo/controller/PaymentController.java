@@ -25,7 +25,7 @@ public class PaymentController {
 
     private final MovementService movementService;
     private final UtenteRepository utenteRepository;
-    private final MovementRepository movementRepository; // ✅ aggiunto
+    private final MovementRepository movementRepository;
 
     @Autowired
     public PaymentController(MovementService movementService,
@@ -33,7 +33,7 @@ public class PaymentController {
                              MovementRepository movementRepository) {
         this.movementService = movementService;
         this.utenteRepository = utenteRepository;
-        this.movementRepository = movementRepository; // ✅ salvato
+        this.movementRepository = movementRepository;
     }
 
     @GetMapping("/payment")
@@ -59,20 +59,35 @@ public class PaymentController {
         String username = auth.getName();
         model.addAttribute("username", username);
 
-        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-        model.addAttribute("utente", userDetails.getUsername());
-
         if (username == null) {
             return "redirect:/login";
         }
 
-        Optional<Utente> userOptional = utenteRepository.findByNome(username);
+        Optional<Utente> userOptional = utenteRepository.findByUsername(username);
         if (userOptional.isEmpty()) {
             return "redirect:/login";
         }
 
         Utente user = userOptional.get();
-        movementService.saveMovement(sender, receiver, amount, user);
+
+        // Trova Utente sender
+        Optional<Utente> senderUserOpt = utenteRepository.findByUsername(sender);
+        if (senderUserOpt.isEmpty()) {
+            model.addAttribute("error", "Sender non trovato");
+            return "payment"; // o pagina errore
+        }
+
+        // Trova Utente receiver
+        Optional<Utente> receiverUserOpt = utenteRepository.findByUsername(receiver);
+        if (receiverUserOpt.isEmpty()) {
+            model.addAttribute("error", "Receiver non trovato");
+            return "payment"; // o pagina errore
+        }
+
+        Utente senderUser = senderUserOpt.get();
+        Utente receiverUser = receiverUserOpt.get();
+
+        movementService.saveMovement(senderUser, receiverUser, amount, user);
 
         return "redirect:/PaymentSucces.html";
     }
@@ -83,11 +98,10 @@ public class PaymentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
 
-        Utente utente = utenteRepository.findByNome(username)
+        Utente utente = utenteRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
-        // ✅ CHIAMATA CORRETTA usando l'istanza e non il nome della classe
-        List<Movement> lastPayments = movementRepository.findTop5ByUtenteOrderByDateDesc(utente);
+        List<Movement> lastPayments = movementRepository.findTop5ByUtenteIdOrderByDateDesc(utente.getId());
 
         System.out.println("Entro2: " + lastPayments);
         model.addAttribute("lastPayments", lastPayments);
@@ -100,8 +114,6 @@ public class PaymentController {
     public String auth(Model model) {
         System.out.println("Sono in auth...");
         model.addAttribute("registerRequest", new RegisterRequest());
-        return "auth"; // <-- senza .html!
+        return "auth";
     }
-
-
 }

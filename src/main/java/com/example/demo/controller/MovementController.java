@@ -27,12 +27,12 @@ public class MovementController {
     @GetMapping("/movements")
     public List<Movement> getLastFiveMovements(Principal principal) {
         // Recupera utente dal nome username (da Principal)
-        Optional<Utente> userOptional = utenteRepository.findByNome(principal.getName());
+        Optional<Utente> userOptional = utenteRepository.findByUsername(principal.getName());
         if (userOptional.isEmpty()) {
             return List.of(); // lista vuota se utente non trovato o si potrebbe gestire errore
         }
         Utente user = userOptional.get();
 
-        return movementRepository.findTop5ByUtenteOrderByDateDesc(user);
+        return movementRepository.findTop5ByUtenteIdOrderByDateDesc(user.getId());
     }
 }

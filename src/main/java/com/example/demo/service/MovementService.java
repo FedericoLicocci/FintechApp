@@ -19,13 +19,14 @@ public class MovementService {
         this.movementRepository = movementRepository;
     }
 
-    public void saveMovement(String sender, String receiver, BigDecimal amount, Utente utente) {
+    public void saveMovement(Utente sender, Utente receiver, BigDecimal amount, Utente utente) {
         Movement movement = new Movement();
         movement.setSender(sender);
         movement.setReceiver(receiver);
         movement.setAmount(amount);
         movement.setDate(LocalDateTime.now());
         movement.setUtente(utente);
+        movement.setStatus(Movement.Status.completed);
 
         movementRepository.save(movement);
     }

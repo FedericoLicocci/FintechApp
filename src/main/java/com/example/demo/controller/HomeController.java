@@ -24,14 +24,14 @@ public class HomeController {
     @GetMapping("/home")
     public String home(Model model, Principal principal) {
 
-        String username = principal.getName(); // nome utente autenticato
+        String username = principal.getName();
 
-        Utente utente = utenteRepository.findByNome(username)
+        Utente utente = utenteRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
-        List<Movement> lastPayments = movementRepository.findTop5ByUtenteOrderByDateDesc(utente);
+        List<Movement> lastPayments = movementRepository.findTop5ByUtenteIdOrderByDateDesc(utente.getId());
 
-        model.addAttribute("saldo", utente.getSaldo()); // presumo ci sia un getSaldo()
+        model.addAttribute("saldo", utente.getSaldo());
         model.addAttribute("lastPayments", lastPayments);
 
         return "home";
