@@ -23,6 +23,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(Model model, Principal principal) {
+
         String username = principal.getName(); // nome utente autenticato
 
         Utente utente = utenteRepository.findByNome(username)

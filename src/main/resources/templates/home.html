@@ -5,73 +5,123 @@
     <title>Home - FintechApp</title>
     <link rel="stylesheet" th:href="@{/css/home.css}">
     <link rel="stylesheet" th:href="@{/css/profileIcon.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<!-- 🔝 Top bar con profilo -->
-<header class="top-bar">
-    <div class="logo">FintechApp</div>
-    <div class="profile-container">
-        <img th:src="@{/images/Profile.png}" id="profileIcon" class="profile-icon" alt="Profilo">
-
-        <div id="userDropdown" class="dropdown-menu">
-            <ul>
-                <li><a th:href="@{/profilo}">Il mio profilo</a></li>
-                <li><a th:href="@{/documenti}">Documenti</a></li>
-                <li><a th:href="@{/impostazioni}">Impostazioni</a></li>
-                <li><a th:href="@{/logout}">Logout</a></li>
-            </ul>
-        </div>
-    </div>
-
-
-</header>
-
-<!-- 🏠 Sezione contenuti principali -->
-<main class="dashboard">
-
-    <!-- 💰 Saldo disponibile -->
-    <section class="saldo">
-        <h2>Saldo disponibile</h2>
-        <p class="saldo-importo" th:text="${saldo} + ' €'">0.00 €</p>
-    </section>
-
-    <!-- 📄 Lista ultimi movimenti -->
-    <section class="movimenti">
-
-        <h2>Ultimi 5 Movimenti</h2>
-
-        <table>
-            <thead>
-            <tr>
-                <th>Mittente</th>
-                <th>Destinatario</th>
-                <th>Importo</th>
-                <th>Data</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="movement : ${lastPayments}">
-                <td th:text="${movement.sender}">Mario</td>
-                <td th:text="${movement.receiver}">Luigi</td>
-                <td th:text="${movement.amount} + ' €'">100 €</td>
-                <td th:text="${#temporals.format(movement.date, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
-            </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <!-- 💳 Sezione pagamenti -->
-    <nav class="menu">
-        <ul>
-            <li><a th:href="@{/pagamenti}"><i class="fa-solid fa-money-bill-transfer"></i> Pagamenti</a></li>
+<div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">🏦 FintechApp</div>
+        <ul class="menu">
+            <li class="active">Dashboard</li>
+            <li><a th:href="@{/pagamenti}">Pagamenti</a></li>
+            <li><a th:href="@{/carte}">Carte</a></li>
+            <li><a th:href="@{/documenti}">Documenti</a></li>
+            <li><a th:href="@{/impostazioni}">Impostazioni</a></li>
         </ul>
-    </nav>
+        <div class="logout"><a th:href="@{/logout}">Logout</a></div>
+    </aside>
 
-</main>
+    <!-- Main content -->
+    <main class="main">
+        <header class="header">
+            <div class="user-profile">
+                <img th:src="@{/images/Profile.png}" alt="Profilo" id="profileIcon" class="profile-icon">
+                <div id="userDropdown" class="dropdown-menu">
+                    <ul>
+                        <li><a th:href="@{/profilo}">Il mio profilo</a></li>
+                        <li><a th:href="@{/documenti}">Documenti</a></li>
+                        <li><a th:href="@{/impostazioni}">Impostazioni</a></li>
+                        <li><a th:href="@{/logout}">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
 
-<!--<script th:src="@{/js/home.js}"></script>-->
+        <!-- Cards -->
+        <section class="cards">
+            <div class="card">
+                <h3 th:text="${saldo} + ' €'">0.00 €</h3>
+                <p>Saldo</p>
+            </div>
+            <div class="card">
+                <h3 th:text="${entrate} + ' €'">0.00 €</h3>
+                <p>Entrate</p>
+            </div>
+            <div class="card">
+                <h3 th:text="${uscite} + ' €'">0.00 €</h3>
+                <p>Uscite</p>
+            </div>
+            <div class="card">
+                <h3 th:text="${risparmi} + ' €'">0.00 €</h3>
+                <p>Risparmi</p>
+            </div>
+        </section>
+
+        <!-- Chart -->
+        <section class="chart-section">
+            <h3>Finanze</h3>
+            <canvas id="financeChart"></canvas>
+        </section>
+
+        <!-- Transaction History -->
+        <section class="transactions">
+            <h3>Ultimi 5 Movimenti</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mittente</th>
+                        <th>Destinatario</th>
+                        <th>Importo</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="movement : ${lastPayments}">
+                        <td th:text="${movement.sender}">Mario</td>
+                        <td th:text="${movement.receiver}">Luigi</td>
+                        <td th:text="${movement.amount} + ' €'">100 €</td>
+                        <td th:text="${#temporals.format(movement.date, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Right panel -->
+    <aside class="right-panel">
+        <div class="my-card">
+            <h3>La mia Carta</h3>
+            <div class="card-img">
+                <img src="https://via.placeholder.com/300x180" alt="Card">
+            </div>
+            <button class="btn">Aggiungi Carta</button>
+        </div>
+
+        <div class="quick-transaction">
+            <h3>Transazione Rapida</h3>
+            <div class="contacts">
+                <img src="https://via.placeholder.com/40" alt="Contatto">
+                <img src="https://via.placeholder.com/40" alt="Contatto">
+                <img src="https://via.placeholder.com/40" alt="Contatto">
+                <img src="https://via.placeholder.com/40" alt="Contatto">
+            </div>
+            <input type="text" placeholder="€ Importo">
+            <button class="btn">Invia</button>
+        </div>
+
+        <div class="my-goals">
+            <h3>I miei obiettivi</h3>
+            <div class="goal">Nuovo PC <span>500 €</span></div>
+            <div class="goal">Vacanza <span>1.200 €</span></div>
+        </div>
+    </aside>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
 <script th:src="@{/js/profileIcon.js}"></script>
-
+<script th:src="@{/js/chart.js}"></script>
 </body>
 </html>

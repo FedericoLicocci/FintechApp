@@ -103,19 +103,5 @@ public class PaymentController {
         return "auth"; // <-- senza .html!
     }
 
-    @PostMapping("/test")
-    @ResponseBody
-    public String test( @RequestParam String username,
-                        @RequestParam String password) {
-
-
-        // Stampa a console
-        System.out.println("Registrazione ricevuta:");
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
-
-        return "Registrazione ricevuta con successo.";
-    }
-
 
 }
