@@ -20,10 +20,25 @@ public class Utente {
     private String password;
     private int saldo;
 
+    // Lista di conti dell'utente
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<conti> conti;
+
+    // Se vuoi mantenere anche movements, li lasci così (opzionale)
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Movement> movements;
 
     public Utente() {}
+
+    // getter e setter
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -53,6 +68,10 @@ public class Utente {
         return codiceFiscale;
     }
 
+    public void setCodiceFiscale(String codiceFiscale) {
+        this.codiceFiscale = codiceFiscale;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -77,10 +96,6 @@ public class Utente {
         this.username = username;
     }
 
-    public void setCodiceFiscale(String codiceFiscale) {
-        this.codiceFiscale = codiceFiscale;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -97,12 +112,12 @@ public class Utente {
         this.saldo = saldo;
     }
 
-    public int getId() {
-        return id;
+    public List<conti> getConti() {
+        return conti;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setConti(List<conti> conti) {
+        this.conti = conti;
     }
 
     public List<Movement> getMovements() {
@@ -113,5 +128,3 @@ public class Utente {
         this.movements = movements;
     }
 }
-
-
