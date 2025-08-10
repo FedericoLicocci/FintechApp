@@ -33,6 +33,6 @@ public class MovementController {
         }
         Utente user = userOptional.get();
 
-        return movementRepository.findTop5ByUtenteIdOrderByDateDesc(user.getId());
+        return movementRepository.findTop5BySenderIdOrderByDateDesc(user.getId());
     }
 }

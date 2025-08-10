@@ -101,7 +101,7 @@ public class PaymentController {
         Utente utente = utenteRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
-        List<Movement> lastPayments = movementRepository.findTop5ByUtenteIdOrderByDateDesc(utente.getId());
+        List<Movement> lastPayments = movementRepository.findTop5BySenderIdOrderByDateDesc(utente.getId());
 
         System.out.println("Entro2: " + lastPayments);
         model.addAttribute("lastPayments", lastPayments);

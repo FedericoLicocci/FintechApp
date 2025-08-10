@@ -13,7 +13,9 @@ import java.util.List;
 public interface MovementRepository extends JpaRepository<Movement, Integer> {
 
     // Trova gli ultimi 5 movimenti per username utente ordinati per data decrescente
-    List<Movement> findTop5ByUtenteIdOrderByDateDesc(Integer userId);
+    // Prende gli ultimi 5 movimenti dove sender.id = userId ordinati per data decrescente
+    List<Movement> findTop5BySenderIdOrderByDateDesc(Integer userId);
+
 
     // Somma di tutti i movimenti ricevuti da un certo sender con amount positivo (entrate)
     @Query("SELECT COALESCE(SUM(m.amount), 0) FROM Movement m WHERE m.sender.id = :senderId AND m.amount > 0")

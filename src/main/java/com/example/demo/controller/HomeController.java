@@ -4,7 +4,10 @@ import com.example.demo.model.Utente;
 import com.example.demo.model.Movement;
 import com.example.demo.repository.UtenteRepository;
 import com.example.demo.repository.MovementRepository;
+import com.example.demo.security.CustomUserDetails;
+import com.example.demo.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +26,15 @@ public class HomeController {
     private MovementRepository movementRepository;
 
     @GetMapping("/home")
-    public String home(Model model, Principal principal) {
+    public String home(Model model, @AuthenticationPrincipal CustomUserDetails CustomUserDetails) {
 
-        String username = principal.getName();
+        System.out.println("Sto crcando un username come questo: " + CustomUserDetails.getUsername());
+        String username = CustomUserDetails.getUsername();
 
         Utente utente = utenteRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
-        List<Movement> lastPayments = movementRepository.findTop5ByUtenteIdOrderByDateDesc(utente.getId());
+        List<Movement> lastPayments = movementRepository.findTop5BySenderIdOrderByDateDesc(utente.getId());
 
         // Somma movimenti positivi con lo stesso senderId (supponiamo senderId = utente.getId())
         BigDecimal totaleEntrate = movementRepository.sumPositiveAmountBySenderId(utente.getId());
