@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class MovementService {
@@ -17,6 +18,10 @@ public class MovementService {
     @Autowired
     public MovementService(MovementRepository movementRepository) {
         this.movementRepository = movementRepository;
+    }
+
+    public List<Movement> getLast5MovementsBySenderId(Integer senderId) {
+        return movementRepository.findTop5BySenderIdOrderByDateDesc(senderId);
     }
 
     public void saveMovement(Utente sender, Utente receiver, BigDecimal amount, Utente utente) {

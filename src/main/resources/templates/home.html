@@ -68,25 +68,42 @@
         <!-- Transaction History -->
         <section class="transactions">
             <h3>Ultimi 5 Movimenti</h3>
+
+            <div style="margin-bottom: 10px;">
+                <a href="/api/movements/export/pdf" title="Scarica PDF" target="_blank" style="margin-right: 15px; text-decoration:none; color:#000;">
+                    <!-- Icona PDF semplice -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#D32F2F" viewBox="0 0 24 24">
+                        <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM9 14h2v2H9v-2zm0-6h6v2H9v-2zm0 3h6v2H9v-2z"/>
+                    </svg>
+                </a>
+                <a href="/api/movements/export/excel" title="Scarica Excel" target="_blank" style="text-decoration:none; color:#107C10;">
+                    <!-- Icona Excel semplice -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#107C10" viewBox="0 0 24 24">
+                        <path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm1 3v12h2l3-4 3 4h2V6H6zm5.6 5.4L11 13l-1.6-1.6H11z"/>
+                    </svg>
+                </a>
+            </div>
+
             <table>
                 <thead>
-                    <tr>
-                        <th>Mittente</th>
-                        <th>Destinatario</th>
-                        <th>Importo</th>
-                        <th>Data</th>
-                    </tr>
+                <tr>
+                    <th>Mittente</th>
+                    <th>Destinatario</th>
+                    <th>Importo</th>
+                    <th>Data</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="movement : ${lastPayments}">
-                        <td th:text="${movement.sender.id}">Mario</td>
-                        <td th:text="${movement.receiver.id}">Luigi</td>
-                        <td th:text="${movement.amount} + ' €'">100 €</td>
-                        <td th:text="${#temporals.format(movement.date, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
-                    </tr>
+                <tr th:each="movement : ${lastPayments}">
+                    <td th:text="${movement.sender.id}">Mario</td>
+                    <td th:text="${movement.receiver.id}">Luigi</td>
+                    <td th:text="${movement.amount} + ' €'">100 €</td>
+                    <td th:text="${#temporals.format(movement.date, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
+                </tr>
                 </tbody>
             </table>
         </section>
+
     </main>
 
     <!-- Right panel -->

@@ -29,6 +29,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // OpenPDF (per generare PDF)
+    implementation 'com.github.librepdf:openpdf:1.3.39'
+
+    // Apache POI (per generare Excel)
+    implementation 'org.apache.poi:poi-ooxml:5.2.5'
+
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.28'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
 }
 
 tasks.named('test') {
