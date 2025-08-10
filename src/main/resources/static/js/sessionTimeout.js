@@ -2,8 +2,8 @@ let logoutTimer;
 let warningTimer;
 
 // Configura tempi
-const TIMEOUT = 1 * 60 * 1000; // 15 minuti
-const WARNING = 1 * 30 * 1000; // Avviso al minuto 14
+const TIMEOUT = 15 * 60 * 1000; // 15 minuti
+const WARNING = 14 * 30 * 1000; // Avviso al minuto 14
 
 function resetTimer() {
 clearTimeout(logoutTimer);
