@@ -15,7 +15,12 @@ public interface MovementRepository extends JpaRepository<Movement, Integer> {
     // Trova gli ultimi 5 movimenti per username utente ordinati per data decrescente
     List<Movement> findTop5ByUtenteIdOrderByDateDesc(Integer userId);
 
-    // Somma di tutti i movimenti ricevuti da un certo sender
-    @Query("SELECT COALESCE(SUM(m.amount), 0) FROM Movement m WHERE m.sender.id = :senderId")
-    BigDecimal sumAmountBySenderId(@Param("senderId") Integer senderId);
+    // Somma di tutti i movimenti ricevuti da un certo sender con amount positivo (entrate)
+    @Query("SELECT COALESCE(SUM(m.amount), 0) FROM Movement m WHERE m.sender.id = :senderId AND m.amount > 0")
+    BigDecimal sumPositiveAmountBySenderId(@Param("senderId") Integer senderId);
+
+    // Somma di tutti i movimenti ricevuti da un certo sender con amount negativo (uscite)
+    @Query("SELECT COALESCE(SUM(m.amount), 0) FROM Movement m WHERE m.sender.id = :senderId AND m.amount < 0")
+    BigDecimal sumNegativeAmountBySenderId(@Param("senderId") Integer senderId);
+
 }

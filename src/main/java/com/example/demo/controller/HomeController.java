@@ -32,17 +32,26 @@ public class HomeController {
 
         List<Movement> lastPayments = movementRepository.findTop5ByUtenteIdOrderByDateDesc(utente.getId());
 
-        // Somma movimenti con lo stesso senderId (supponiamo senderId = utente.getId())
-        BigDecimal totaleEntrate = movementRepository.sumAmountBySenderId(utente.getId());
+        // Somma movimenti positivi con lo stesso senderId (supponiamo senderId = utente.getId())
+        BigDecimal totaleEntrate = movementRepository.sumPositiveAmountBySenderId(utente.getId());
+
+        // Somma movimenti negativi con lo stesso senderId (supponiamo senderId = utente.getId())
+        BigDecimal totaleUscite = movementRepository.sumNegativeAmountBySenderId(utente.getId());
 
         // se non ci sono movimenti, sum può essere null
         if (totaleEntrate == null) {
             totaleEntrate = BigDecimal.ZERO;
         }
 
+        // se non ci sono movimenti, sum può essere null
+        if (totaleUscite == null) {
+            totaleUscite = BigDecimal.ZERO;
+        }
+
         model.addAttribute("saldo", utente.getSaldo());
         model.addAttribute("lastPayments", lastPayments);
         model.addAttribute("entrate", totaleEntrate);
+        model.addAttribute("uscite", totaleUscite);
 
         return "home";
     }
