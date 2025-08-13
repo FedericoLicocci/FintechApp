@@ -110,6 +110,18 @@ public class PaymentController {
         return "lastmovements.html";
     }
 
+    @GetMapping("/pagamenti")
+    public String paytest(Model model) {
+        System.out.println("Sono in paytest...");
+        return "pagamenti";
+    }
+
+    @GetMapping("/bonifico/terzi")
+    public String bonificoTerzi(Model model) {
+        System.out.println("Sono in bonifico terzi...");
+        return "bonifico-terzi";
+    }
+
     @GetMapping("/auth")
     public String auth(Model model) {
         System.out.println("Sono in auth...");

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagamenti - FintechApp</title>
+
+    <!-- Stili globali esistenti + stile specifico pagamenti -->
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/pagamenti.css}">
+    <link rel="stylesheet" th:href="@{/css/profileIcon.css}">
+
+    <!-- Font Awesome (icone) -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-p1CmV6e2k8+6XW0g8eQjK1Vg6l5w7s1e1Zrjv7w2uY1g1hOZq+0R5s3z6q1d7e0JxQ/4K7e3z5k6bZf5x0Q=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">🏦 FintechApp</div>
+
+        <nav>
+            <ul class="menu">
+                <li><a th:href="@{/home}"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                <li class="active"><a th:href="@{/pagamenti}"><i class="fa-solid fa-money-bill-transfer"></i> Pagamenti</a></li>
+                <li><a th:href="@{/carte}"><i class="fa-solid fa-credit-card"></i> Carte</a></li>
+                <li><a th:href="@{/documenti}"><i class="fa-solid fa-file-lines"></i> Documenti</a></li>
+                <li><a th:href="@{/impostazioni}"><i class="fa-solid fa-gear"></i> Impostazioni</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a th:href="@{/logout}" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+        <!-- header -->
+        <header class="header">
+            <div class="page-title">
+                <h1>Pagamenti</h1>
+                <small class="muted">Esegui bonifici, giroconti e programma pagamenti ricorrenti</small>
+            </div>
+
+            <div class="header-actions">
+                <input class="search" type="search" placeholder="Cerca beneficiario o IBAN..." aria-label="Cerca">
+                <button class="btn-outline" th:href="@{/beneficiari}">Gestisci beneficiari</button>
+                <img th:src="@{/images/Profile.png}" id="profileIcon" class="profile-icon" alt="Profilo">
+            </div>
+        </header>
+
+        <!-- toolbar azioni rapide -->
+        <section class="toolbar">
+            <button class="cta" th:href="@{/bonifico/nuovo}"><i class="fa-solid fa-plus"></i> Nuovo Bonifico</button>
+            <button class="cta ghost" th:href="@{/giroconto}"><i class="fa-solid fa-right-left"></i> Giroconto</button>
+            <button class="cta ghost" th:href="@{/schedulazione}"><i class="fa-solid fa-clock"></i> Schedulazioni</button>
+        </section>
+
+        <!-- griglia pagamenti -->
+        <section class="payment-grid">
+
+            <!-- CARD: Bonifico SEPA (gruppo) -->
+            <article class="payment-card wide">
+                <div class="card-head">
+                    <div class="icon-wrap gradient-blue"><i class="fa-solid fa-earth-europe"></i></div>
+                    <div>
+                        <h3>Bonifico SEPA</h3>
+                        <p class="muted">Invia denaro verso conti IBAN</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="split-buttons">
+                        <a th:href="@{/bonifico/propri}" class="small-btn"><i class="fa-solid fa-building-columns"></i> Verso conti propri</a>
+                        <a th:href="@{/bonifico/terzi}" class="small-btn"><i class="fa-solid fa-user-plus"></i> Verso terzi</a>
+                        <a th:href="@{/bonifico/ricorrente}" class="small-btn"><i class="fa-solid fa-calendar-days"></i> Ricorrente</a>
+                    </div>
+                    <p class="hint">Consigliato: aggiungi i beneficiari per invii più veloci.</p>
+                </div>
+            </article>
+
+            <!-- CARD: Giroconto -->
+            <a th:href="@{/giroconto}" class="payment-card">
+                <div class="card-head">
+                    <div class="icon-wrap gradient-green"><i class="fa-solid fa-exchange-alt"></i></div>
+                    <div>
+                        <h3>Giroconto</h3>
+                        <p class="muted">Sposta fondi tra i tuoi conti</p>
+                    </div>
+                </div>
+                <div class="card-body small">
+                    <p class="muted">Semplice e immediato — scegli conto sorgente e destinatario.</p>
+                </div>
+            </a>
+
+            <!-- CARD: Schedulazione pagamenti -->
+            <a th:href="@{/schedulazione}" class="payment-card">
+                <div class="card-head">
+                    <div class="icon-wrap gradient-orange"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div>
+                        <h3>Schedulazione</h3>
+                        <p class="muted">Programma pagamenti ricorrenti o futuri</p>
+                    </div>
+                </div>
+                <div class="card-body small">
+                    <p class="muted">Visualizza e modifica le tue pianificazioni.</p>
+                </div>
+            </a>
+
+            <!-- CARD: Altri strumenti (es. import bonifici) -->
+            <a th:href="@{/import}" class="payment-card">
+                <div class="card-head">
+                    <div class="icon-wrap gradient-gray"><i class="fa-solid fa-file-import"></i></div>
+                    <div>
+                        <h3>Import / File XML</h3>
+                        <p class="muted">Importa un file SEPA/XML per invii multipli</p>
+                    </div>
+                </div>
+                <div class="card-body small">
+                    <p class="muted">Supporto ISO20022 e generazione anteprima.</p>
+                </div>
+            </a>
+        </section>
+
+        <!-- Lista rapida / riepilogo -->
+        <section class="mini-panels">
+            <div class="panel">
+                <h4>Prossima esecuzione</h4>
+                <p class="muted">Nessuna schedulazione attiva</p>
+            </div>
+            <div class="panel">
+                <h4>Beneficiari rapidi</h4>
+                <div class="avatars">
+                    <img src="https://via.placeholder.com/36" alt="B1">
+                    <img src="https://via.placeholder.com/36" alt="B2">
+                    <img src="https://via.placeholder.com/36" alt="B3">
+                    <a th:href="@{/beneficiari}" class="more">+ Gestisci</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RIGHT PANEL -->
+    <aside class="right-panel">
+        <div class="my-card">
+            <h3>Aiuto rapido</h3>
+            <p class="muted">Hai bisogno di assistenza con i bonifici? <a th:href="@{/help}">Vai alla guida</a></p>
+        </div>
+
+        <div class="my-card">
+            <h3>Promemoria</h3>
+            <p class="muted">Ricordati di aggiornare i dati dei beneficiari per invii più veloci.</p>
+        </div>
+    </aside>
+</div>
+
+<!-- Footer (frammento globale) -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- JS -->
+<script th:src="@{/js/profileIcon.js}"></script>
+<script th:src="@{/js/pagamenti.js}"></script>
+
+</body>
+</html>
