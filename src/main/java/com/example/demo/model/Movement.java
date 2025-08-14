@@ -34,6 +34,9 @@ public class Movement {
     @Column(nullable = false)
     private Status status = Status.completed;
 
+    @Column(name = "causale", nullable = false)
+    private String causale;
+
     public enum Status {
         pending,
         completed,
@@ -98,5 +101,13 @@ public class Movement {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setCausale(String causale) {
+        this.causale = causale;
+    }
+
+    public String getCausale() {
+        return causale;
     }
 }
