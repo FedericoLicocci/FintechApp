@@ -18,7 +18,7 @@ public class Utente {
     private String telefono;
     private String username;
     private String password;
-    private int saldo;
+    //private int saldo;
 
     // Lista di conti dell'utente
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -104,13 +104,13 @@ public class Utente {
         this.password = password;
     }
 
-    public int getSaldo() {
-        return saldo;
-    }
+//    public int getSaldo() {
+//        return saldo;
+//    }
 
-    public void setSaldo(int saldo) {
-        this.saldo = saldo;
-    }
+//    public void setSaldo(int saldo) {
+//        this.saldo = saldo;
+//    }
 
     public List<conti> getConti() {
         return conti;
