@@ -6,6 +6,7 @@ import com.example.demo.repository.UtenteRepository;
 import com.example.demo.repository.MovementRepository;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.security.CustomUserDetailsService;
+import com.example.demo.service.ContoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,13 @@ import java.util.List;
 
 @Controller
 public class HomeController {
+
+    private final ContoService contoService;
+
+    // Iniezione tramite costruttore (best practice con Spring)
+    public HomeController(ContoService contoService) {
+        this.contoService = contoService;
+    }
 
     @Autowired
     private UtenteRepository utenteRepository;
@@ -42,6 +50,8 @@ public class HomeController {
         // Somma movimenti negativi con lo stesso senderId (supponiamo senderId = utente.getId())
         BigDecimal totaleUscite = movementRepository.sumNegativeAmountBySenderId(utente.getId());
 
+        BigDecimal saldo = contoService.getSaldoDisponibileUtenteCorrente();
+
         // se non ci sono movimenti, sum può essere null
         if (totaleEntrate == null) {
             totaleEntrate = BigDecimal.ZERO;
@@ -52,7 +62,7 @@ public class HomeController {
             totaleUscite = BigDecimal.ZERO;
         }
 
-        model.addAttribute("saldo", utente.getSaldo());
+        model.addAttribute("saldo", saldo);
         model.addAttribute("lastPayments", lastPayments);
         model.addAttribute("entrate", totaleEntrate);
         model.addAttribute("uscite", totaleUscite);

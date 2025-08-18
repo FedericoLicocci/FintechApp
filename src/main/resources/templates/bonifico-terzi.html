@@ -50,16 +50,16 @@
 
         <!-- 📝 Form Bonifico -->
         <section class="form-section">
-            <form th:action="@{/pagamenti/bonifico-terzi}" method="post" class="styled-form">
+            <form id="BonificoForm" th:action="@{/payment}" method="post" class="styled-form">
 
                 <div class="form-group">
                     <label for="ibanDestinatario">IBAN Destinatario</label>
-                    <input type="text" id="ibanDestinatario" name="ibanDestinatario" placeholder="IT60X0542811101000000123456" required>
+                    <input type="text" id="ibanDestinatario" name="IBAN" placeholder="IT60X0542811101000000123456" required>
                 </div>
 
                 <div class="form-group">
                     <label for="nomeDestinatario">Nome e Cognome / Ragione Sociale</label>
-                    <input type="text" id="nomeDestinatario" name="nomeDestinatario" placeholder="Mario Rossi" required>
+                    <input type="text" id="nomeDestinatario" name="nomeCompleto" placeholder="Mario Rossi" required>
                 </div>
 
                 <div class="form-group">
@@ -79,7 +79,6 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Invia Bonifico</button>
-                    <a th:href="@{/pagamenti}" class="btn-secondary"><i class="fa-solid fa-arrow-left"></i> Annulla</a>
                 </div>
 
             </form>
@@ -88,6 +87,7 @@
 </div>
 
 <script th:src="@{/js/profileIcon.js}"></script>
+<script th:src="@{/js/bonifico.js}"></script>
 
 </body>
 </html>
