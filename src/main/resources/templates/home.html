@@ -91,13 +91,15 @@
                     <th>Destinatario</th>
                     <th>Importo</th>
                     <th>Data</th>
+                    <th>Causale</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="movement : ${lastPayments}">
-                    <td th:text="${movement.sender.id}">Mario</td>
-                    <td th:text="${movement.receiver.id}">Luigi</td>
+                    <td th:text="${movement.ibanSender}">IBAN Mittente</td>
+                    <td th:text="${movement.ibanReceiver}">IBAN Destinatario</td>
                     <td th:text="${movement.amount} + ' €'">100 €</td>
+                    <td th:text="${movement.causale}">Causale</td>
                     <td th:text="${#temporals.format(movement.date, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
                 </tr>
                 </tbody>

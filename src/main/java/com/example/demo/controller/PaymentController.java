@@ -24,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,14 +98,28 @@ public class PaymentController {
         contiRepository.save(conto);
         System.out.println("Il nuovo saldo è di: " + conto.getSaldoDisponibile());
 
+        // ✅ Creazione e salvataggio del movimento
+        Movement movimento = new Movement();
+        movimento.setAmount(importo.negate());
+        movimento.setDate(LocalDateTime.now());
+        movimento.setIbanSender(conto.getNumeroConto());
+        movimento.setIbanReceiver(request.getIBAN());
+        //movimento.setUtente(utente); // se ti serve tener traccia dell'utente che effettua l’operazione
+        movimento.setStatus(Movement.Status.completed);
+        movimento.setCausale(request.getCausale());
+
+        movementRepository.save(movimento);
+        System.out.println("Movimento registrato con ID: " + movimento.getTransactionid());
+
         return ResponseEntity.ok("Bonifico eseguito con successo!");
     }
 
 
     @PostMapping("/make-payment")
-    public String makePayment(@RequestParam String sender,
+    public String makePayment(@RequestParam String senderIban,
                               @RequestParam BigDecimal amount,
-                              @RequestParam String receiver,
+                              @RequestParam String receiverIban,
+                              @RequestParam String causale,
                               HttpSession session,
                               Model model) {
 
@@ -120,41 +135,60 @@ public class PaymentController {
         if (userOptional.isEmpty()) {
             return "redirect:/login";
         }
-
         Utente user = userOptional.get();
 
-        // Trova Utente sender
-        Optional<Utente> senderUserOpt = utenteRepository.findByUsername(sender);
-        if (senderUserOpt.isEmpty()) {
-            model.addAttribute("error", "Sender non trovato");
-            return "payment"; // o pagina errore
+        // ✅ Usa l'istanza iniettata contoRepository
+        Optional<conti> senderContoOpt = contiRepository.findByNumeroConto(senderIban);
+        if (senderContoOpt.isEmpty()) {
+            model.addAttribute("error", "Conto mittente non trovato");
+            return "payment";
         }
 
-        // Trova Utente receiver
-        Optional<Utente> receiverUserOpt = utenteRepository.findByUsername(receiver);
-        if (receiverUserOpt.isEmpty()) {
-            model.addAttribute("error", "Receiver non trovato");
-            return "payment"; // o pagina errore
+        Optional<conti> receiverContoOpt = contiRepository.findByNumeroConto(receiverIban);
+        if (receiverContoOpt.isEmpty()) {
+            model.addAttribute("error", "Conto destinatario non trovato");
+            return "payment";
         }
 
-        Utente senderUser = senderUserOpt.get();
-        Utente receiverUser = receiverUserOpt.get();
+        conti senderConto = senderContoOpt.get();
+        conti receiverConto = receiverContoOpt.get();
 
-        movementService.saveMovement(senderUser, receiverUser, amount, user);
+        System.out.println("Importo movimento da salvare: " + amount);
+        // L'importo sarà sempre negativo perché è un bonifico in uscita
+        BigDecimal importoMovimento = amount.negate();
+        System.out.println("Importo movimento da salvare: " + importoMovimento);
+        // Salva il movimento
+        movementService.saveMovement(
+                senderConto.getNumeroConto(),
+                receiverConto.getNumeroConto(),
+                importoMovimento,
+                causale
+        );
 
         return "redirect:/PaymentSucces.html";
     }
 
+
+
+
     @GetMapping("/lastmovements")
     public String showLastMovements(Model model) {
         System.out.println("Entro");
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
 
         Utente utente = utenteRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
-        List<Movement> lastPayments = movementRepository.findTop5BySenderIdOrderByDateDesc(utente.getId());
+        // Recupera il conto dell'utente per ottenere l'IBAN
+        conti conto = contiRepository.findByUtenteId(utente.getId())
+                .orElseThrow(() -> new RuntimeException("Conto non trovato"));
+
+        String ibanUtente = conto.getNumeroConto();
+
+        // Recupera gli ultimi 5 movimenti usando l'IBAN
+        List<Movement> lastPayments = movementRepository.findTop5ByIbanSenderOrderByDateDesc(ibanUtente);
 
         System.out.println("Entro2: " + lastPayments);
         model.addAttribute("lastPayments", lastPayments);
@@ -162,6 +196,7 @@ public class PaymentController {
         System.out.println(lastPayments);
         return "lastmovements.html";
     }
+
 
     @GetMapping("/pagamenti")
     public String paytest(Model model) {

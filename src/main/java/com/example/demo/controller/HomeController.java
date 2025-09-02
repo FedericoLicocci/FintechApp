@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Utente;
 import com.example.demo.model.Movement;
+import com.example.demo.model.conti;
+import com.example.demo.repository.ContoRepository;
 import com.example.demo.repository.UtenteRepository;
 import com.example.demo.repository.MovementRepository;
 import com.example.demo.security.CustomUserDetails;
@@ -31,36 +33,34 @@ public class HomeController {
     private UtenteRepository utenteRepository;
 
     @Autowired
+    private ContoRepository contiRepository;
+
+    @Autowired
     private MovementRepository movementRepository;
 
     @GetMapping("/home")
     public String home(Model model, @AuthenticationPrincipal CustomUserDetails CustomUserDetails) {
 
-        System.out.println("Sto crcando un username come questo: " + CustomUserDetails.getUsername());
         String username = CustomUserDetails.getUsername();
-
         Utente utente = utenteRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
-        List<Movement> lastPayments = movementRepository.findTop5BySenderIdOrderByDateDesc(utente.getId());
+        conti conto = contiRepository.findByUtenteId(utente.getId())
+                .orElseThrow(() -> new RuntimeException("Conto non trovato"));
 
-        // Somma movimenti positivi con lo stesso senderId (supponiamo senderId = utente.getId())
-        BigDecimal totaleEntrate = movementRepository.sumPositiveAmountBySenderId(utente.getId());
+        String ibanUtente = conto.getNumeroConto();
 
-        // Somma movimenti negativi con lo stesso senderId (supponiamo senderId = utente.getId())
-        BigDecimal totaleUscite = movementRepository.sumNegativeAmountBySenderId(utente.getId());
+        // Ultimi 5 movimenti
+        List<Movement> lastPayments = movementRepository.findTop5ByIbanSenderOrderByDateDesc(ibanUtente);
+
+        // Somma entrate e uscite basate sull'IBAN del mittente
+        BigDecimal totaleEntrate = movementRepository.sumPositiveAmountByIbanSender(ibanUtente);
+        BigDecimal totaleUscite = movementRepository.sumNegativeAmountByIbanSender(ibanUtente);
+
+        if (totaleEntrate == null) totaleEntrate = BigDecimal.ZERO;
+        if (totaleUscite == null) totaleUscite = BigDecimal.ZERO;
 
         BigDecimal saldo = contoService.getSaldoDisponibileUtenteCorrente();
-
-        // se non ci sono movimenti, sum può essere null
-        if (totaleEntrate == null) {
-            totaleEntrate = BigDecimal.ZERO;
-        }
-
-        // se non ci sono movimenti, sum può essere null
-        if (totaleUscite == null) {
-            totaleUscite = BigDecimal.ZERO;
-        }
 
         model.addAttribute("saldo", saldo);
         model.addAttribute("lastPayments", lastPayments);
@@ -69,4 +69,5 @@ public class HomeController {
 
         return "home";
     }
+
 }

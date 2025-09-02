@@ -12,4 +12,5 @@ public interface ContoRepository extends JpaRepository<conti, Integer> {
     @Query("SELECT c FROM conti c WHERE c.utente.id = :utenteId")
     Optional<conti> findByUtenteId(@Param("utenteId") Integer utenteId);
 
+    Optional<conti> findByNumeroConto(String numeroConto); // nuovo metodo
 }

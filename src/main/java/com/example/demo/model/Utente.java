@@ -25,8 +25,8 @@ public class Utente {
     private List<conti> conti;
 
     // Se vuoi mantenere anche movements, li lasci così (opzionale)
-    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Movement> movements;
+//    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Movement> movements;
 
     public Utente() {}
 
@@ -120,11 +120,11 @@ public class Utente {
         this.conti = conti;
     }
 
-    public List<Movement> getMovements() {
-        return movements;
-    }
+//    public List<Movement> getMovements() {
+//        return movements;
+//    }
 
-    public void setMovements(List<Movement> movements) {
-        this.movements = movements;
-    }
+//    public void setMovements(List<Movement> movements) {
+//        this.movements = movements;
+//    }
 }

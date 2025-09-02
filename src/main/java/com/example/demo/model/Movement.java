@@ -18,17 +18,11 @@ public class Movement {
     @Column(nullable = false)
     private LocalDateTime date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "senderid", nullable = false)
-    private Utente sender;
+    @Column(name = "iban_sender", nullable = false, length = 34)
+    private String ibanSender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiverid", nullable = false)
-    private Utente receiver;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userid", nullable = false)
-    private Utente utente;
+    @Column(name = "iban_receiver", nullable = false, length = 34)
+    private String ibanReceiver;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -71,28 +65,20 @@ public class Movement {
         this.date = date;
     }
 
-    public Utente getSender() {
-        return sender;
+    public String getIbanSender() {
+        return ibanSender;
     }
 
-    public void setSender(Utente sender) {
-        this.sender = sender;
+    public void setIbanSender(String ibanSender) {
+        this.ibanSender = ibanSender;
     }
 
-    public Utente getReceiver() {
-        return receiver;
+    public String getIbanReceiver() {
+        return ibanReceiver;
     }
 
-    public void setReceiver(Utente receiver) {
-        this.receiver = receiver;
-    }
-
-    public Utente getUtente() {
-        return utente;
-    }
-
-    public void setUtente(Utente utente) {
-        this.utente = utente;
+    public void setIbanReceiver(String ibanReceiver) {
+        this.ibanReceiver = ibanReceiver;
     }
 
     public Status getStatus() {
@@ -103,11 +89,11 @@ public class Movement {
         this.status = status;
     }
 
-    public void setCausale(String causale) {
-        this.causale = causale;
-    }
-
     public String getCausale() {
         return causale;
+    }
+
+    public void setCausale(String causale) {
+        this.causale = causale;
     }
 }

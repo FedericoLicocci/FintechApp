@@ -31,8 +31,8 @@ public class MovementExportService {
         this.movementService = movementService;
     }
 
-    public void exportToPdf(Integer senderId, OutputStream outputStream) throws IOException {
-        List<Movement> movements = movementService.getLast5MovementsBySenderId(senderId);
+    public void exportToPdf(String ibanSender, OutputStream outputStream) throws IOException {
+        List<Movement> movements = movementService.getLast5ByIbanSenderOrderByDateDesc(ibanSender);
 
         Document document = new Document();
         try {
@@ -44,12 +44,12 @@ public class MovementExportService {
 
             PdfPTable table = new PdfPTable(2);
             table.addCell("Data");
-            //table.addCell("Descrizione");
+            // table.addCell("Descrizione");
             table.addCell("Importo");
 
             for (Movement m : movements) {
                 table.addCell(m.getDate().toString());
-                //table.addCell(m.getDescription());
+                // table.addCell(m.getCausale());
                 table.addCell(m.getAmount().toString());
             }
 
@@ -61,26 +61,28 @@ public class MovementExportService {
         }
     }
 
-    public void exportToExcel(Integer senderId, OutputStream outputStream) throws IOException {
-        List<Movement> movements = movementService.getLast5MovementsBySenderId(senderId);
+    public void exportToExcel(String ibanSender, OutputStream outputStream) throws IOException {
+        List<Movement> movements = movementService.getLast5ByIbanSenderOrderByDateDesc(ibanSender);
 
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Ultimi Movimenti");
 
             Row headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("Data");
-            //headerRow.createCell(1).setCellValue("Descrizione");
-            headerRow.createCell(2).setCellValue("Importo");
+            // headerRow.createCell(1).setCellValue("Descrizione");
+            headerRow.createCell(1).setCellValue("Importo");
 
             int rowIdx = 1;
             for (Movement m : movements) {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(0).setCellValue(m.getDate().toString());
-                //row.createCell(1).setCellValue(m.getDescription());
-                row.createCell(2).setCellValue(m.getAmount().doubleValue());
+                // row.createCell(1).setCellValue(m.getCausale());
+                row.createCell(1).setCellValue(m.getAmount().doubleValue());
             }
 
             workbook.write(outputStream);
         }
     }
+
 }
+

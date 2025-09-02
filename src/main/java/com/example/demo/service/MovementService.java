@@ -20,17 +20,19 @@ public class MovementService {
         this.movementRepository = movementRepository;
     }
 
-    public List<Movement> getLast5MovementsBySenderId(Integer senderId) {
-        return movementRepository.findTop5BySenderIdOrderByDateDesc(senderId);
+    public List<Movement> getLast5ByIbanSenderOrderByDateDesc(String ibanSender) {
+        return movementRepository.findTop5ByIbanSenderOrderByDateDesc(ibanSender);
     }
 
-    public void saveMovement(Utente sender, Utente receiver, BigDecimal amount, Utente utente) {
+
+    // Salvataggio con IBAN invece che Utente
+    public void saveMovement(String ibanSender, String ibanReceiver, BigDecimal amount, String causale) {
         Movement movement = new Movement();
-        movement.setSender(sender);
-        movement.setReceiver(receiver);
+        movement.setIbanSender(ibanSender);
+        movement.setIbanReceiver(ibanReceiver);
         movement.setAmount(amount);
         movement.setDate(LocalDateTime.now());
-        movement.setUtente(utente);
+        movement.setCausale(causale);
         movement.setStatus(Movement.Status.completed);
 
         movementRepository.save(movement);
