@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -24,5 +26,12 @@ public interface MovementRepository extends JpaRepository<Movement, Integer> {
     @Query("SELECT SUM(m.amount) FROM Movement m WHERE m.ibanSender = :iban AND m.amount < 0")
     BigDecimal sumNegativeAmountByIbanSender(@Param("iban") String iban);
 
+//    @Query("SELECT m FROM Movement m " +
+//            "WHERE m.ibanSender = :ibanSender " +
+//            "AND m.date >= :startDate " +
+//            "ORDER BY m.date ASC")
+    @Query("SELECT m FROM Movement m WHERE m.ibanSender = :ibanSender AND m.date >= :startDate ORDER BY m.date ASC")
+    List<Movement> findLast30DaysMovements(@Param("ibanSender") String ibanSender,
+                                           @Param("startDate") LocalDateTime startDate);
 
 }

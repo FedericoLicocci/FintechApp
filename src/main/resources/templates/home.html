@@ -59,11 +59,57 @@
 <!--            </div>-->
         </section>
 
-        <!-- Chart -->
         <section class="chart-section">
-            <h3>Finanze</h3>
+            <h3>Finanze (Ultimi 30 Giorni)</h3>
             <canvas id="financeChart"></canvas>
         </section>
+
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <!-- Inject aggregated movements into JS -->
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+                // Thymeleaf injects labels and data directly
+                const labels = /*[[${chartLabels}]]*/ [];
+                const data = /*[[${chartData}]]*/ [];
+
+                const ctx = document.getElementById("financeChart").getContext("2d");
+                new Chart(ctx, {
+                    type: "line", // change to 'bar' if preferred
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Pagamenti (€)",
+                            data: data,
+                            borderColor: "rgba(75, 192, 192, 1)",
+                            backgroundColor: "rgba(75, 192, 192, 0.2)",
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointBackgroundColor: "red"
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: true },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `€${ctx.raw}`
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { ticks: { maxRotation: 45, minRotation: 45 } },
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            /*]]>*/
+        </script>
+
+
 
         <!-- Transaction History -->
         <section class="transactions">

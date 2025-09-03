@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,5 +37,10 @@ public class MovementService {
         movement.setStatus(Movement.Status.completed);
 
         movementRepository.save(movement);
+    }
+
+    public List<Movement> getLast30DaysMovements(String ibanSender) {
+        LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
+        return movementRepository.findLast30DaysMovements(ibanSender, thirtyDaysAgo);
     }
 }
