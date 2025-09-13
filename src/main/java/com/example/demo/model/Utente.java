@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.time.LocalDate;
 
+//Questa classe rappresenta i dati dell'utente
 @Entity
 public class Utente {
 
@@ -18,15 +19,11 @@ public class Utente {
     private String telefono;
     private String username;
     private String password;
-    //private int saldo;
+
 
     // Lista di conti dell'utente
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<conti> conti;
-
-    // Se vuoi mantenere anche movements, li lasci così (opzionale)
-//    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Movement> movements;
 
     public Utente() {}
 
@@ -104,14 +101,6 @@ public class Utente {
         this.password = password;
     }
 
-//    public int getSaldo() {
-//        return saldo;
-//    }
-
-//    public void setSaldo(int saldo) {
-//        this.saldo = saldo;
-//    }
-
     public List<conti> getConti() {
         return conti;
     }
@@ -120,11 +109,4 @@ public class Utente {
         this.conti = conti;
     }
 
-//    public List<Movement> getMovements() {
-//        return movements;
-//    }
-
-//    public void setMovements(List<Movement> movements) {
-//        this.movements = movements;
-//    }
 }

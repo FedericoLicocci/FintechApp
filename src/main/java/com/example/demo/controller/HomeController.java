@@ -1,5 +1,8 @@
+//Package dedicato alla gestione dei controller
 package com.example.demo.controller;
 
+// Import di classi definite all'interno del progetto
+// (model, repository, security e servizi personalizzati)
 import com.example.demo.model.Utente;
 import com.example.demo.model.Movement;
 import com.example.demo.model.conti;
@@ -10,30 +13,40 @@ import com.example.demo.security.CustomUserDetails;
 import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.service.ContoService;
 import com.example.demo.service.MovementService;
+
+// Import di librerie fornite da Spring Framework
+// (annotazioni, gestione sicurezza, controller e rendering di pagine con Thymeleaf)
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+// Import di classi della libreria standard Java
+// (gestione numeri decimali, utenti loggati, date e collezioni)
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+//Definizione del controller che gestisce le richieste HTTP
 @Controller
 public class HomeController {
 
+    // Servizi iniettati da Spring
+    // ContoService -> logica per la gestione dei conti
+    // MovementService -> logica per i movimenti e transazioni
     private final ContoService contoService;
     private final MovementService movementService;
 
-    // Iniezione tramite costruttore (best practice con Spring)
+    // Iniezione tramite costruttore
     public HomeController(ContoService contoService, MovementService movementService) {
         this.contoService = contoService;
         this.movementService = movementService;
     }
 
+    // Repository per interagire direttamente con il database.
     @Autowired
     private UtenteRepository utenteRepository;
 
@@ -43,25 +56,30 @@ public class HomeController {
     @Autowired
     private MovementRepository movementRepository;
 
+
+    // Il metodo seguente gestisce la rotta GET "/home"
+    // Nel momento in cui un utente viene autenticato viene caricata la dashboard.
     @GetMapping("/home")
     public String home(Model model, @AuthenticationPrincipal CustomUserDetails CustomUserDetails) {
 
+        // Recupero delle informazioni dell’utente loggato
         String username = CustomUserDetails.getUsername();
         Utente utente = utenteRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
+        // Recupero del conto associato all’utente
         conti conto = contiRepository.findByUtenteId(utente.getId())
                 .orElseThrow(() -> new RuntimeException("Conto non trovato"));
-
         String ibanUtente = conto.getNumeroConto();
 
-        // Ultimi 5 movimenti
-        List<Movement> lastPayments = movementRepository.findTop5ByIbanSenderOrderByDateDesc(ibanUtente);
+        // Ultimi 5 movimenti sul conto
+        List<Movement> lastPayments = movementRepository.findTop5ByIbanSenderOrderByExecutionDateDesc(ibanUtente);
 
         // Somma entrate e uscite basate sull'IBAN del mittente
         BigDecimal totaleEntrate = movementRepository.sumPositiveAmountByIbanSender(ibanUtente);
         BigDecimal totaleUscite = movementRepository.sumNegativeAmountByIbanSender(ibanUtente);
 
+        // Gestione del caso in cui non esistano movimenti, per evitare valori nulli
         if (totaleEntrate == null) totaleEntrate = BigDecimal.ZERO;
         if (totaleUscite == null) totaleUscite = BigDecimal.ZERO;
 
@@ -73,7 +91,7 @@ public class HomeController {
         // Raggruppa per giorno e somma gli importi
         Map<LocalDate, BigDecimal> dailySums = movements.stream()
                 .collect(Collectors.groupingBy(
-                        m -> m.getDate().toLocalDate(), // estrai solo la data senza ora
+                        m -> m.getExecutionDate().toLocalDate(), // estrai solo la data senza ora
                         TreeMap::new, // mantiene ordinati i giorni
                         Collectors.mapping(Movement::getAmount,
                                 Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))
@@ -86,7 +104,7 @@ public class HomeController {
 
         List<BigDecimal> chartData = new ArrayList<>(dailySums.values());
 
-        // Aggiungi attributi al modello
+        // Passa gli attributi al modello per renderli disponibili a Thymeleaf
         model.addAttribute("saldo", saldo);
         model.addAttribute("lastPayments", lastPayments);
         model.addAttribute("entrate", totaleEntrate);

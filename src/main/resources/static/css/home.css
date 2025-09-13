@@ -14,7 +14,7 @@ body {
 /* GRID LAYOUT */
 .container {
     display: grid;
-    grid-template-columns: 220px 1fr 300px;
+    grid-template-columns: 220px 1fr;
     height: 100vh;
 }
 
@@ -129,7 +129,7 @@ body {
 }
 
 /* RIGHT PANEL */
-.right-panel {
+/*.right-panel {
     background: #f4f5f7;
     padding: 20px;
     overflow-y: auto;
@@ -168,4 +168,4 @@ body {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
-}
+}*/

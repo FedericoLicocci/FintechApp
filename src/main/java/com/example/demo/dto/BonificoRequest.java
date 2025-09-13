@@ -1,10 +1,15 @@
+//Package dedicato alla validazione delle informazioni
 package com.example.demo.dto;
 
+//Import librerie spring
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+//Import librerie Java
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
+//Dichiarazione classe pubblica
 public class BonificoRequest {
 
     @NotBlank(message = "L'IBAN non può essere vuoto\n")
@@ -23,9 +28,9 @@ public class BonificoRequest {
     private String nomeCompleto;
 
     @NotNull(message = "L'importo è obbligatorio")
-    @Min(value = 1, message = "L'importo minimo è 1 euro")
+    @DecimalMin(value = "1.00", message = "L'importo minimo è 1 euro")
     @Digits(integer = 15, fraction = 2, message = "L'importo deve avere massimo 15 cifre intere e 2 decimali")
-    private Integer importo;
+    private BigDecimal importo;
 
     @NotBlank(message = "La causale non può essere vuota")
     @Size(min = 5, max = 140, message = "La causale deve essere tra 5 e 140 caratteri")
@@ -35,7 +40,9 @@ public class BonificoRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataEsecuzione;
 
-    // Getters & Setters
+    private boolean instant; // toggle switch (true = immediato, false = ordinario)
+
+    // Getters e Setters per le variabili dichiarate
     public String getIBAN() {
         return IBAN;
     }
@@ -52,11 +59,11 @@ public class BonificoRequest {
         this.nomeCompleto = nomeCompleto;
     }
 
-    public Integer getImporto() {
+    public BigDecimal getImporto() {
         return importo;
     }
 
-    public void setImporto(Integer importo) {
+    public void setImporto(BigDecimal importo) {
         this.importo = importo;
     }
 
@@ -75,4 +82,11 @@ public class BonificoRequest {
     public void setDataEsecuzione(LocalDate dataEsecuzione) {
         this.dataEsecuzione = dataEsecuzione;
     }
+
+    public boolean isInstant() { return instant; }
+
+    public void setInstant(boolean instant) { this.instant = instant ; }
 }
+
+
+

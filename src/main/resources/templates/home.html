@@ -133,20 +133,18 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Mittente</th>
                     <th>Destinatario</th>
                     <th>Importo</th>
-                    <th>Data</th>
                     <th>Causale</th>
+                    <th>Data</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="movement : ${lastPayments}">
-                    <td th:text="${movement.ibanSender}">IBAN Mittente</td>
                     <td th:text="${movement.ibanReceiver}">IBAN Destinatario</td>
                     <td th:text="${movement.amount} + ' €'">100 €</td>
                     <td th:text="${movement.causale}">Causale</td>
-                    <td th:text="${#temporals.format(movement.date, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
+                    <td th:text="${#temporals.format(movement.executionDate, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
                 </tr>
                 </tbody>
             </table>
@@ -154,34 +152,34 @@
 
     </main>
 
-    <!-- Right panel -->
-    <aside class="right-panel">
-        <div class="my-card">
-            <h3>La mia Carta</h3>
-            <div class="card-img">
-                <img src="https://via.placeholder.com/300x180" alt="Card">
-            </div>
-            <button class="btn">Aggiungi Carta</button>
-        </div>
+<!--    &lt;!&ndash; Right panel &ndash;&gt;-->
+<!--    <aside class="right-panel">-->
+<!--        <div class="my-card">-->
+<!--            <h3>La mia Carta</h3>-->
+<!--            <div class="card-img">-->
+<!--                <img src="https://via.placeholder.com/300x180" alt="Card">-->
+<!--            </div>-->
+<!--            <button class="btn">Aggiungi Carta</button>-->
+<!--        </div>-->
 
-        <div class="quick-transaction">
-            <h3>Transazione Rapida</h3>
-            <div class="contacts">
-                <img src="https://via.placeholder.com/40" alt="Contatto">
-                <img src="https://via.placeholder.com/40" alt="Contatto">
-                <img src="https://via.placeholder.com/40" alt="Contatto">
-                <img src="https://via.placeholder.com/40" alt="Contatto">
-            </div>
-            <input type="text" placeholder="€ Importo">
-            <button class="btn">Invia</button>
-        </div>
+<!--        <div class="quick-transaction">-->
+<!--            <h3>Transazione Rapida</h3>-->
+<!--            <div class="contacts">-->
+<!--                <img src="https://via.placeholder.com/40" alt="Contatto">-->
+<!--                <img src="https://via.placeholder.com/40" alt="Contatto">-->
+<!--                <img src="https://via.placeholder.com/40" alt="Contatto">-->
+<!--                <img src="https://via.placeholder.com/40" alt="Contatto">-->
+<!--            </div>-->
+<!--            <input type="text" placeholder="€ Importo">-->
+<!--            <button class="btn">Invia</button>-->
+<!--        </div>-->
 
-        <div class="my-goals">
-            <h3>I miei obiettivi</h3>
-            <div class="goal">Nuovo PC <span>500 €</span></div>
-            <div class="goal">Vacanza <span>1.200 €</span></div>
-        </div>
-    </aside>
+<!--        <div class="my-goals">-->
+<!--            <h3>I miei obiettivi</h3>-->
+<!--            <div class="goal">Nuovo PC <span>500 €</span></div>-->
+<!--            <div class="goal">Vacanza <span>1.200 €</span></div>-->
+<!--        </div>-->
+<!--    </aside>-->
 </div>
 
 <div th:replace="fragments/footer :: footer"></div>

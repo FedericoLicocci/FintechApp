@@ -1,11 +1,14 @@
+//Package dedicato alla validazione
 package com.example.demo.dto;
 
+//Import delle librerie Spring e di validazione
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
+//Import librerie Java
 import java.time.LocalDate;
 
 public class RegisterRequest {
@@ -45,7 +48,7 @@ public class RegisterRequest {
     )
     private String password;
 
-    // Getters and Setters
+    // getter e setter
 
     public String getNome() {
         return nome;

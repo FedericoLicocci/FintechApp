@@ -1,5 +1,7 @@
+//Package dedicato alla gestione dei controller
 package com.example.demo.controller;
 
+//Import di classi del progetto
 import com.example.demo.model.Movement;
 import com.example.demo.model.Utente;
 import com.example.demo.model.conti;
@@ -8,17 +10,20 @@ import com.example.demo.repository.MovementRepository;
 import com.example.demo.repository.UtenteRepository;
 import com.example.demo.service.MovementExportService;
 
+//Import Librerie spring
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+//Import Librerie Java
 import java.io.ByteArrayOutputStream;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+//Definisce un controller REST che restituisce JSON (o file), non HTML
 @RestController
 @RequestMapping("/api")
 public class MovementController {
@@ -28,7 +33,7 @@ public class MovementController {
     private final MovementExportService movementExportService;
 
 
-
+    //Iniezione tramite costruttore
     @Autowired
     public MovementController(MovementRepository movementRepository,
                               UtenteRepository utenteRepository,
@@ -41,6 +46,7 @@ public class MovementController {
     @Autowired
     private ContoRepository contiRepository;
 
+    // Endpoint GET che permette di recuperare gli ultimi 5 movimenti dell'utente loggato
     @GetMapping("/movements")
     public List<Movement> getLastFiveMovements(Principal principal) {
         Optional<Utente> userOptional = utenteRepository.findByUsername(principal.getName());
@@ -56,10 +62,10 @@ public class MovementController {
         String ibanUtente = conto.getNumeroConto();
 
         // Restituisce gli ultimi 5 movimenti filtrati per IBAN
-        return movementRepository.findTop5ByIbanSenderOrderByDateDesc(ibanUtente);
+        return movementRepository.findTop5ByIbanSenderOrderByExecutionDateDesc(ibanUtente);
     }
 
-
+    //Esporta i movimenti dell'utente in PDF
     @GetMapping("/movements/export/pdf")
     public ResponseEntity<byte[]> exportMovementsToPdf(Principal principal) throws Exception {
         Optional<Utente> userOptional = utenteRepository.findByUsername(principal.getName());
@@ -74,18 +80,20 @@ public class MovementController {
 
         String ibanUtente = conto.getNumeroConto();
 
+        // Genera il PDF in memoria
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         movementExportService.exportToPdf(ibanUtente, baos);
 
         byte[] pdfBytes = baos.toByteArray();
 
+        //Restituisce il file come risposta HTTP e lo scarica in automatico
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=movements.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfBytes);
     }
 
-
+    //Esporta i movimenti dell'utente in Excel
     @GetMapping("/movements/export/excel")
     public ResponseEntity<byte[]> exportMovementsToExcel(Principal principal) throws Exception {
         Optional<Utente> userOptional = utenteRepository.findByUsername(principal.getName());
@@ -100,11 +108,13 @@ public class MovementController {
 
         String ibanUtente = conto.getNumeroConto();
 
+        //Genera il file Excel in memoria
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         movementExportService.exportToExcel(ibanUtente, baos);
 
         byte[] excelBytes = baos.toByteArray();
 
+        //Restituisce il file come risposta HTTP e lo scarica in automatico
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=movements.xlsx")
                 .contentType(MediaType.parseMediaType(

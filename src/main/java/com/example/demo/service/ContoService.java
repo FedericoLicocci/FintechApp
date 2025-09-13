@@ -1,17 +1,22 @@
 package com.example.demo.service;
 
+//Import delle classi del progetto
 import com.example.demo.model.conti;
 import com.example.demo.model.Utente;
 import com.example.demo.repository.ContoRepository;
 import com.example.demo.repository.UtenteRepository;
+
+//Import librerie Spring
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+//Import librerie Java
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 
 @Service
 public class ContoService {
@@ -38,14 +43,15 @@ public class ContoService {
         Utente utente = utenteRepository.findById(utenteId)
                 .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con id: " + utenteId));
 
+        //Definizione del conto
         conti conto = new conti();
         conto.setUtente(utente);
         conto.setNumeroConto(numeroConto);
         conto.setTipoConto(tipoConto != null ? tipoConto : "corrente");
         conto.setSaldoContabile(saldoIniziale != null ? saldoIniziale : BigDecimal.ZERO);
         conto.setSaldoDisponibile(saldoIniziale != null ? saldoIniziale : BigDecimal.ZERO);
-        // La data di apertura viene gestita dall'annotazione @PrePersist nell'entità Conto
 
+        //Salvataggio del conto
         return contoRepository.save(conto);
     }
 
@@ -63,13 +69,13 @@ public class ContoService {
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
 
-            // 2. Trova l'utente nel database usando lo username per ottenere il suo ID
+            // 2. Trova l'utente nel database usando lo username
             Optional<Utente> utenteOpt = utenteRepository.findByUsername(username);
 
             if (utenteOpt.isPresent()) {
                 Integer utenteId = utenteOpt.get().getId();
 
-                // 3. Usa il tuo metodo findByUtenteId per trovare il conto
+                // 3. Recupero il conto associato all'ID
                 Optional<conti> contoOpt = contoRepository.findByUtenteId(utenteId);
 
                 // 4. Se il conto esiste, restituisci il suo saldo disponibile

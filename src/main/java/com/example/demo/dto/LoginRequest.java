@@ -1,5 +1,7 @@
+//Package dedicato alla validazione
 package com.example.demo.dto;
 
+//Import della libreria per evitare campi vuoti
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginRequest {
@@ -10,7 +12,7 @@ public class LoginRequest {
     @NotBlank(message = "Password obbligatoria")
     private String password;
 
-    // Getters and Setters
+    // getter e setter
 
     public String getNome() {
         return nome;

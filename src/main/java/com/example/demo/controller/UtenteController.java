@@ -1,10 +1,13 @@
+//Package dedicato alla gestione dei controller
 package com.example.demo.controller;
 
+//Import delle classi del progetto
 import com.example.demo.model.Utente;
-import com.example.demo.model.conti;  // attenzione a maiuscole, usa Conto (non conti)
-
+import com.example.demo.model.conti;
 import com.example.demo.repository.ContoRepository;
 import com.example.demo.repository.UtenteRepository;
+
+//Import libreri Spring
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,46 +19,56 @@ import com.example.demo.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 
+//Importo librerie Java
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+
+//Questo controller si occupa della gestione dell'utente (Registrazione, Autenticazione, ecc...)
 @Controller
 public class UtenteController {
 
+    //Repository per la persistenza di utenti e conti
     private final UtenteRepository utenteRepository;
     private final ContoRepository contoRepository;  // aggiunto il repository di Conto
 
+    //Inizione delle dipendenze con costruttore
     @Autowired
     public UtenteController(UtenteRepository utenteRepository, ContoRepository contoRepository) {
         this.utenteRepository = utenteRepository;
         this.contoRepository = contoRepository;  // inizializzato tramite constructor injection
     }
 
+    //Rotta che si rimanda alla pagina di registrazione dell'utente
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("registerRequest", new RegisterRequest());
-        return "auth"; // this is your register.html
+        return "auth";
     }
 
+    // Reindirizza alla pagina useRegistration
     @PostMapping("/signup")
     public String redirectToForm() {
         System.out.println("Sono in SIGNUP...");
         return "useRegistration";
     }
 
+    //Mostra la pagina dei termini e condizioni
     @GetMapping("/terms")
     public String showTermsPage() {
         return "terms";
     }
 
+    //Rotta per la registrazione di un nuovo utente
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity<String> registerUser(
-            @Valid @ModelAttribute("registerRequest") RegisterRequest request,
+            @Valid @ModelAttribute("registerRequest") RegisterRequest request, //I valori vengono presi dal DTO
             BindingResult result
     ) {
-        System.out.println("Sono in /Register...");
+        //System.out.println("Sono in /Register...");
 
+        //Effettua un controllo sui campi inseriti
         if (result.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder("Errore di validazione:\n");
             result.getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append("\n"));
@@ -65,6 +78,7 @@ public class UtenteController {
                     .body(errorMessage.toString().trim());
         }
 
+        //Verifica se c'è già un utente con lo stesso nome inserito nel sistema
         if (utenteRepository.findByUsername(request.getUsername()).isPresent()) {
             System.out.println("C'è già un utente con questo nome!");
             return ResponseEntity
@@ -83,8 +97,9 @@ public class UtenteController {
         nuovoUtente.setUsername(request.getUsername());
         nuovoUtente.setPassword(request.getPassword()); // ⚠️ Da criptare
 
+        //Salvataggio dell'utente nel DB
         utenteRepository.save(nuovoUtente);
-        System.out.println("Utente " + nuovoUtente.getUsername() + " aggiunto al DB");
+        //System.out.println("Utente " + nuovoUtente.getUsername() + " aggiunto al DB");
 
         // Creazione Conto associato
         conti conto = new conti();
@@ -95,16 +110,17 @@ public class UtenteController {
         conto.setSaldoDisponibile(BigDecimal.ZERO);
         conto.setDataApertura(LocalDateTime.now());
 
+        //Salvataggio del conto nel DB
         contoRepository.save(conto);  // qui uso l'istanza, non la classe!
-        System.out.println("Conto associato creato per utente " + nuovoUtente.getUsername());
+        //System.out.println("Conto associato creato per utente " + nuovoUtente.getUsername());
 
         return ResponseEntity
                 .ok("Registrazione avvenuta con successo con conto associato");
     }
 
-    // Implementa qui un metodo per generare un numero conto unico
+    // Generazione di un IBAN unico per il conto
     private String generaNumeroContoUnico() {
-        // esempio semplice: puoi fare una random string, o basarti su sequenza DB, etc.
+        //Il prefisso IT + Tempo in millisecondi
         return "IT" + System.currentTimeMillis();
     }
 }

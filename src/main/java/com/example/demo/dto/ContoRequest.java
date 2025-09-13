@@ -1,9 +1,14 @@
+//Package per la validazione delle variabili
 package com.example.demo.dto;
 
+//Import librerie Spring
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+//Import librerie Java
 import java.math.BigDecimal;
 
+//Dichiarazione classe pubblica
 public class ContoRequest {
 
     @NotNull(message = "Id utente obbligatorio")
@@ -14,7 +19,7 @@ public class ContoRequest {
 
     private String tipoConto = "corrente";  // default
 
-    private BigDecimal saldoIniziale = BigDecimal.ZERO;
+    private BigDecimal saldoIniziale = BigDecimal.ZERO; //Inizializza il conto con €0
 
     // getter e setter
     public Integer getUtenteId() {
