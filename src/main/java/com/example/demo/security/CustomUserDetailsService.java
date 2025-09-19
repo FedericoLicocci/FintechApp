@@ -22,7 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     //Metodo usato per caricare un utente in base allo Username fornito in fase di login
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //System.out.println("Cercando utente con nome: " + username);
         return utenteRepository.findByUsername(username)
                 .map(CustomUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato: " + username));

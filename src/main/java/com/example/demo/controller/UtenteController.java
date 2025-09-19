@@ -49,7 +49,6 @@ public class UtenteController {
     // Reindirizza alla pagina useRegistration
     @PostMapping("/signup")
     public String redirectToForm() {
-        System.out.println("Sono in SIGNUP...");
         return "useRegistration";
     }
 
@@ -66,7 +65,7 @@ public class UtenteController {
             @Valid @ModelAttribute("registerRequest") RegisterRequest request, //I valori vengono presi dal DTO
             BindingResult result
     ) {
-        //System.out.println("Sono in /Register...");
+
 
         //Effettua un controllo sui campi inseriti
         if (result.hasErrors()) {
@@ -95,11 +94,10 @@ public class UtenteController {
         nuovoUtente.setEmail(request.getEmail());
         nuovoUtente.setTelefono(request.getTelefono());
         nuovoUtente.setUsername(request.getUsername());
-        nuovoUtente.setPassword(request.getPassword()); // ⚠️ Da criptare
+        nuovoUtente.setPassword(request.getPassword());
 
         //Salvataggio dell'utente nel DB
         utenteRepository.save(nuovoUtente);
-        //System.out.println("Utente " + nuovoUtente.getUsername() + " aggiunto al DB");
 
         // Creazione Conto associato
         conti conto = new conti();
@@ -112,7 +110,6 @@ public class UtenteController {
 
         //Salvataggio del conto nel DB
         contoRepository.save(conto);  // qui uso l'istanza, non la classe!
-        //System.out.println("Conto associato creato per utente " + nuovoUtente.getUsername());
 
         return ResponseEntity
                 .ok("Registrazione avvenuta con successo con conto associato");

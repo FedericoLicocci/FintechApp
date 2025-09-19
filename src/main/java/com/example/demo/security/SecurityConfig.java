@@ -32,10 +32,10 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    // Encoder di password: usa testo in chiaro (solo per test!)
+    // Encoder di password: usa testo in chiaro
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // SOLO PER TEST!
+        return NoOpPasswordEncoder.getInstance();
     }
 
     // Configurazione dei filtri di sicurezza (login, autorizzazioni, ecc.)

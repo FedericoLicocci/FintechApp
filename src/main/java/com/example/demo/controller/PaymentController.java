@@ -76,7 +76,7 @@ public class PaymentController {
             BindingResult result
     ) {
 
-        //System.out.println("Sono in payment...");
+
 
         //Controlla se ci sono errori
         if (result.hasErrors()) {
@@ -99,7 +99,7 @@ public class PaymentController {
         BigDecimal saldoDisponibile = conto.getSaldoDisponibile();
         BigDecimal importo = request.getImporto();
 
-        //System.out.println("Il saldo è: " + saldoDisponibile + " e l'importo da scalare è di: " + importo);
+
 
         //Controlla se il saldo è sufficiente per eseguire l'operazione
         if (saldoDisponibile.compareTo(importo) < 0) {
@@ -140,7 +140,7 @@ public class PaymentController {
         movimento.setExecutionDate(request.getDataEsecuzione().atTime(16, 0));
         movimento.setStatus(Movement.Status.scheduled);
 
-        //System.out.println("Bonifico ordinario programmato per il " + movimento.getExecutionDate());
+        System.out.println("Bonifico ordinario programmato per il " + movimento.getExecutionDate());
     }
 
         //Salvataggio del movimento sul DB
@@ -183,21 +183,18 @@ public class PaymentController {
     //Pagina dedicata a tutte le modalità di pagamento
     @GetMapping("/pagamenti")
     public String paytest(Model model) {
-        System.out.println("Sono in paytest...");
         return "pagamenti";
     }
 
     //pagina con il form per il bonifico
     @GetMapping("/bonifico/terzi")
     public String bonificoTerzi(Model model) {
-        System.out.println("Sono in bonifico terzi...");
         return "bonifico-terzi";
     }
 
     //Pagina di autenticazione utente
     @GetMapping("/auth")
     public String auth(Model model) {
-        System.out.println("Sono in auth...");
         model.addAttribute("registerRequest", new RegisterRequest());
         return "auth";
     }
